@@ -10,4 +10,3 @@ public class ShiHuaApplication {
         SpringApplication.run(ShiHuaApplication.class, args);
     }
 }
-
