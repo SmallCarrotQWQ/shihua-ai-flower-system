@@ -1,0 +1,21 @@
+.env
+*.env
+node_modules/
+.npm-cache/
+.pip-cache/
+.venv/
+.m2/
+.idea/
+project plan/.obsidian/
+target/
+dist/
+logs/
+*.log
+__pycache__/
+*.pyc
+storage/uploads/*
+!storage/uploads/.gitkeep
+FastAPI-Backend/runtime/models/*
+!FastAPI-Backend/runtime/models/.gitkeep
+FastAPI-Backend/runtime/chroma/*
+!FastAPI-Backend/runtime/chroma/.gitkeep

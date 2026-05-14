@@ -1,0 +1,35 @@
+server:
+  servlet:
+    context-path: /api/v1
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:shihua_ai_flower}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:}
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 50
+      max-wait: 3000
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2s
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+shihua:
+  jwt:
+    secret: ${JWT_SECRET:replace-with-at-least-32-characters-secret}
+    ttl-seconds: 7200
+  ai:
+    base-url: ${FASTAPI_BASE_URL:http://localhost:5000}
