@@ -139,6 +139,51 @@ Authorization: Bearer <token>
 - `admin`：后台登录、鲜花管理、分类管理、订单管理、用户管理
 - `ai`：代理调用 FastAPI 的 AI 贺卡、AI 客服、AI 识花接口
 
+## 管理员后台接口
+
+已实现基础管理员接口，当前要求携带登录后的 JWT；角色级拦截可在后续接入管理员登录后再收紧。
+
+```text
+GET    /api/v1/admin/dashboard/stats
+GET    /api/v1/admin/flower
+POST   /api/v1/admin/flower
+PUT    /api/v1/admin/flower/{id}
+PUT    /api/v1/admin/flower/{id}/status
+DELETE /api/v1/admin/flower/{id}
+GET    /api/v1/admin/category
+POST   /api/v1/admin/category
+PUT    /api/v1/admin/category/{id}
+DELETE /api/v1/admin/category/{id}
+GET    /api/v1/admin/order
+PUT    /api/v1/admin/order/{id}/status
+GET    /api/v1/admin/user
+PUT    /api/v1/admin/user/{id}/status
+```
+
+鲜花新增/修改请求示例：
+
+```json
+{
+  "flowerName": "红玫瑰礼盒",
+  "categoryId": 1,
+  "price": 99.00,
+  "stock": 100,
+  "coverImage": "",
+  "description": "经典红玫瑰礼盒",
+  "flowerLanguage": "热烈的爱",
+  "careGuide": "斜剪花茎，保持清水。",
+  "status": 1
+}
+```
+
+状态更新统一使用：
+
+```json
+{
+  "status": 1
+}
+```
+
 ## 基础下单流程
 
 1. 注册或登录获取 token。

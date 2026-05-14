@@ -3,6 +3,10 @@
     <aside>
       <h1>拾花后台</h1>
       <RouterLink to="/admin/dashboard">数据看板</RouterLink>
+      <RouterLink to="/admin/flower">鲜花管理</RouterLink>
+      <RouterLink to="/admin/category">分类管理</RouterLink>
+      <RouterLink to="/admin/order">订单管理</RouterLink>
+      <RouterLink to="/admin/user">用户管理</RouterLink>
       <RouterLink to="/home">返回商城</RouterLink>
     </aside>
     <main>
@@ -39,4 +43,3 @@ main {
   padding: 28px;
 }
 </style>
-

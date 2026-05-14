@@ -13,7 +13,7 @@ public record FlowerVO(
     String description,
     String flowerLanguage,
     String careGuide,
-    Integer salesCount
+    Integer salesCount,
+    Integer status
 ) {
 }
-

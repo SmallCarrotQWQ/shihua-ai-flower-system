@@ -20,6 +20,7 @@ export interface Flower {
   flowerLanguage?: string;
   careGuide?: string;
   salesCount: number;
+  status: number;
 }
 
 export function getCategories() {
@@ -37,4 +38,3 @@ export function getHotFlowers(limit = 8) {
 export function getFlowerDetail(id: number | string) {
   return http.get<ApiResponse<Flower>>(`/flower/${id}`);
 }
-

@@ -10,6 +10,10 @@ import FlowerDetailView from "@/views/FlowerDetailView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
+import AdminFlowerView from "@/views/admin/AdminFlowerView.vue";
+import AdminCategoryView from "@/views/admin/AdminCategoryView.vue";
+import AdminOrderView from "@/views/admin/AdminOrderView.vue";
+import AdminUserView from "@/views/admin/AdminUserView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -34,7 +38,11 @@ const router = createRouter({
       component: AdminLayout,
       children: [
         { path: "", redirect: "/admin/dashboard" },
-        { path: "dashboard", component: AdminDashboard }
+        { path: "dashboard", component: AdminDashboard },
+        { path: "flower", component: AdminFlowerView },
+        { path: "category", component: AdminCategoryView },
+        { path: "order", component: AdminOrderView },
+        { path: "user", component: AdminUserView }
       ]
     }
   ]

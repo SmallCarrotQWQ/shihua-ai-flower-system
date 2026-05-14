@@ -86,9 +86,9 @@ public class FlowerService {
                 flower.getDescription(),
                 flower.getFlowerLanguage(),
                 flower.getCareGuide(),
-                flower.getSalesCount()
+                flower.getSalesCount(),
+                flower.getStatus()
             );
         }).toList();
     }
 }
-
