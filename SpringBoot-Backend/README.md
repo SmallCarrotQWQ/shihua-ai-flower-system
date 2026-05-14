@@ -97,17 +97,72 @@ modules/user/
 
 ## 下一步开发任务
 
-优先实现这些模块：
+已实现的基础电商闭环接口：
 
-- `user`：注册、登录、当前用户信息、地址管理
-- `flower`：分类列表、鲜花列表、鲜花详情、热销榜
-- `cart`：加入购物车、购物车列表、修改数量、删除
-- `order`：提交订单、模拟支付、订单列表、订单详情
+- `user`：注册、登录、当前用户信息
+- `category`：分类列表
+- `flower`：鲜花列表、鲜花详情、热销榜
+- `cart`：加入购物车、购物车列表、修改数量、删除、清空
+- `order`：提交订单、订单列表、订单详情
 
-之后实现：
+当前可测试接口：
 
+```text
+POST   /api/v1/user/register
+POST   /api/v1/user/login
+GET    /api/v1/user/info
+GET    /api/v1/category
+GET    /api/v1/flower
+GET    /api/v1/flower?categoryId=1&keyword=玫瑰
+GET    /api/v1/flower/hot?limit=8
+GET    /api/v1/flower/{id}
+GET    /api/v1/cart
+POST   /api/v1/cart
+PUT    /api/v1/cart/{id}
+DELETE /api/v1/cart/{id}
+DELETE /api/v1/cart
+POST   /api/v1/order
+GET    /api/v1/order
+GET    /api/v1/order/{id}
+```
+
+购物车和订单接口需要 Header：
+
+```text
+Authorization: Bearer <token>
+```
+
+后续继续实现：
+
+- `user`：地址管理、修改资料、修改密码
+- `order`：模拟支付、确认收货、评价
 - `admin`：后台登录、鲜花管理、分类管理、订单管理、用户管理
 - `ai`：代理调用 FastAPI 的 AI 贺卡、AI 客服、AI 识花接口
+
+## 基础下单流程
+
+1. 注册或登录获取 token。
+2. 调用 `GET /flower` 或 `GET /flower/{id}` 选择商品。
+3. 调用 `POST /cart` 加入购物车：
+
+```json
+{
+  "flowerId": 1001,
+  "quantity": 1
+}
+```
+
+4. 调用 `GET /cart` 查看购物车。
+5. 调用 `POST /order` 提交订单：
+
+```json
+{
+  "cartIds": [1, 2],
+  "remark": "前端提交订单"
+}
+```
+
+如果 `cartIds` 为空，后端会默认提交当前用户购物车内全部商品。
 
 ## 编码约定
 
@@ -117,4 +172,3 @@ modules/user/
 - 所有响应使用 `ApiResponse<T>` 包装。
 - 密码必须 BCrypt 加密。
 - 后续 JWT 黑名单、验证码、热点商品缓存放 Redis。
-

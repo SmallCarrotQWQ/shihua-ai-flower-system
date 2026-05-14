@@ -62,16 +62,31 @@ src/views/admin/  管理端页面
 
 ## 下一步开发任务
 
-优先实现用户端页面并接入后端接口：
+已实现并接入后端的用户端页面：
 
 - 登录页：调用 `POST /user/login`
 - 注册页：调用 `POST /user/register`
-- 首页：调用 `GET /flower/hot`、`GET /flower/recommend`
+- 首页：调用 `GET /flower/hot`
 - 分类页：调用 `GET /category`
 - 商品列表：调用 `GET /flower`
 - 商品详情：调用 `GET /flower/{id}`
 - 购物车：调用 `GET /cart`、`POST /cart`、`PUT /cart/{id}`、`DELETE /cart/{id}`
 - 订单确认：调用 `POST /order`
+
+当前页面路由：
+
+```text
+/home
+/category
+/list
+/list?categoryId=1
+/detail/:id
+/cart
+/login
+/register
+```
+
+本轮只做功能区分和接口对接，没有做最终视觉美化。后续美化时优先替换这些页面的布局和样式，不需要重写 API 封装。
 
 管理员端在用户端闭环完成后再做：
 
@@ -87,4 +102,3 @@ src/views/admin/  管理端页面
 - 登录态统一放在 `src/stores/auth.ts`。
 - 用户端组件优先考虑移动端宽度。
 - 管理端组件优先使用 Element Plus 表格、表单和弹窗。
-

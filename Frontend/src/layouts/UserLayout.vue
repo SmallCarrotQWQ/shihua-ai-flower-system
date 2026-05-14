@@ -4,6 +4,8 @@
       <RouterLink class="brand" to="/home">拾花</RouterLink>
       <nav>
         <RouterLink to="/home">首页</RouterLink>
+        <RouterLink to="/category">分类</RouterLink>
+        <RouterLink to="/list">鲜花</RouterLink>
         <RouterLink to="/ai-scan">AI识花</RouterLink>
         <RouterLink to="/cart">购物车</RouterLink>
         <RouterLink to="/admin/dashboard">管理端</RouterLink>
