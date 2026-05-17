@@ -90,6 +90,8 @@ src/views/admin/  管理端页面
 /profile
 /address
 /orders
+/ai-scan
+/ai-card
 /login
 /register
 ```
@@ -119,6 +121,32 @@ src/views/admin/  管理端页面
 ```
 
 购物车提交订单前会读取用户地址列表，优先选择默认地址。订单创建请求会携带 `addressId`，后端会保存地址快照。
+
+## AI 识花与贺卡页面
+
+当前新增两个用户侧 AI 页面：
+
+```text
+/ai-scan  图片文件上传识花
+/ai-card  AI 贺卡生成与历史记录
+```
+
+`/ai-scan` 只支持选择本地图片文件上传，暂不接入拍照。页面会调用 FastAPI：
+
+```text
+POST ${VITE_AI_BASE_URL}/recognize
+```
+
+请求格式为 `multipart/form-data`，字段为 `image` 和可选 `top_k`。页面会展示图片预览、Top 5 识别结果、置信度、花语和关联商品 ID。
+
+`/ai-card` 需要登录后访问，页面会调用 SpringBoot：
+
+```text
+POST /api/v1/ai/card
+GET  /api/v1/ai/card
+```
+
+生成表单字段包括鲜花名称、可选鲜花 ID、收礼关系、场景、风格和字数。生成结果会保存到后端 `ai_card` 表，并在历史记录中展示。
 
 ## 智能花语客服组件
 

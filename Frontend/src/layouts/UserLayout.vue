@@ -7,6 +7,7 @@
         <RouterLink to="/category">分类</RouterLink>
         <RouterLink to="/list">鲜花</RouterLink>
         <RouterLink to="/ai-scan">AI识花</RouterLink>
+        <RouterLink to="/ai-card">AI贺卡</RouterLink>
         <RouterLink to="/cart">购物车</RouterLink>
         <RouterLink v-if="auth.token" to="/profile">我的</RouterLink>
         <RouterLink v-if="auth.token" to="/orders">订单</RouterLink>

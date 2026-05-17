@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.models.flower_recognition import flower_model
 from app.routers import chat, generate, recognize, sentiment
 from app.services.vector_service import ensure_chroma
 
@@ -9,7 +10,7 @@ app = FastAPI(title="ShiHua FastAPI AI Service", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174","http://127.0.0.1:5174"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,7 +36,9 @@ async def health() -> dict:
             "service": "FastAPI-Backend",
             "status": "UP",
             "model_path": settings.model_path,
-            "model_exists": settings.model_path_obj.exists(),
+            "recognition_model_path": flower_model.status()["model_path"],
+            "model_exists": flower_model.status()["model_exists"],
+            "model_loaded": flower_model.status()["model_loaded"],
             "chroma_path": settings.chroma_path,
             "deepseek_configured": bool(settings.deepseek_api_key),
         },

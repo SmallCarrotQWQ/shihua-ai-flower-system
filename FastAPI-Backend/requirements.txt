@@ -11,3 +11,4 @@ openai==1.58.1
 pillow==11.0.0
 numpy==1.26.4
 tensorflow==2.18.0
+fastai==2.7.12

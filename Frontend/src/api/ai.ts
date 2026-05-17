@@ -15,6 +15,59 @@ export function chatWithAi(message: string, sessionId: string) {
   });
 }
 
+export interface FlowerRecognitionResult {
+  class_id: number;
+  class_name_en: string;
+  class_name_cn: string;
+  confidence: number;
+  flower_language: string;
+  related_products: number[];
+}
+
+export async function recognizeFlower(file: File, topK = 5) {
+  const baseURL = import.meta.env.VITE_AI_BASE_URL ?? "http://localhost:5000";
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("top_k", String(topK));
+
+  const response = await fetch(`${baseURL}/recognize`, {
+    method: "POST",
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error("AI 识花服务暂时不可用，请稍后再试。");
+  }
+
+  return response.json() as Promise<ApiResponse<{ predictions: FlowerRecognitionResult[] }>>;
+}
+
+export interface AiCard {
+  cardId: number;
+  flowerId?: number;
+  relation: string;
+  occasion: string;
+  generatedContent: string;
+  createTime?: string;
+}
+
+export interface AiCardPayload {
+  flowerId?: number;
+  flowerName: string;
+  relation: string;
+  occasion: string;
+  style: string;
+  length: number;
+}
+
+export function generateAiCard(payload: AiCardPayload) {
+  return http.post<ApiResponse<AiCard>>("/ai/card", payload);
+}
+
+export function getAiCards() {
+  return http.get<ApiResponse<AiCard[]>>("/ai/card");
+}
+
 export interface AiStreamDone {
   reply: string;
   session_id: string;

@@ -53,7 +53,7 @@ FastAPI-Backend/.env
 DEEPSEEK_API_KEY=
 DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
 DEEPSEEK_MODEL=deepseek-chat
-MODEL_PATH=./runtime/models/flower_model.h5
+MODEL_PATH=./runtime/models/final_flowers_dataset_v_1.pkl
 CLASS_NAMES_PATH=./runtime/models/class_names.json
 REDIS_URL=redis://localhost:6379/0
 CHROMA_PATH=./runtime/chroma
@@ -79,7 +79,7 @@ VITE_AI_BASE_URL=http://localhost:5000
 识花模型放在：
 
 ```text
-FastAPI-Backend/runtime/models/flower_model.h5
+FastAPI-Backend/runtime/models/final_flowers_dataset_v_1.pkl
 ```
 
 类别映射放在：

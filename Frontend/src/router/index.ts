@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import UserLayout from "@/layouts/UserLayout.vue";
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import HomeView from "@/views/HomeView.vue";
+import AiCardView from "@/views/AiCardView.vue";
 import AiScanView from "@/views/AiScanView.vue";
 import CartView from "@/views/CartView.vue";
 import CategoryView from "@/views/CategoryView.vue";
@@ -32,6 +33,7 @@ const router = createRouter({
         { path: "list", component: FlowerListView },
         { path: "detail/:id", component: FlowerDetailView },
         { path: "ai-scan", component: AiScanView },
+        { path: "ai-card", component: AiCardView },
         { path: "cart", component: CartView },
         { path: "profile", component: ProfileView },
         { path: "address", component: AddressView },
@@ -60,7 +62,7 @@ router.beforeEach((to) => {
   if (to.path.startsWith("/admin") && auth.userInfo?.role !== "ADMIN") {
     return "/home";
   }
-  if (["/cart", "/profile", "/address", "/orders"].includes(to.path) && !auth.token) {
+  if (["/cart", "/profile", "/address", "/orders", "/ai-card"].includes(to.path) && !auth.token) {
     return "/login";
   }
 });

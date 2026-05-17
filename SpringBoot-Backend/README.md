@@ -318,15 +318,18 @@ POST /api/v1/ai/card
 GET  /api/v1/ai/card
 ```
 
+前端已接入 `/ai-card` 页面，用户登录后可填写鲜花名称、收礼关系、场景、风格和字数生成贺卡，并查看历史记录。
+
 请求示例：
 
 ```json
 {
+  "flowerId": 1001,
   "flowerName": "康乃馨",
-  "recipient": "妈妈",
+  "relation": "妈妈",
   "occasion": "生日",
   "style": "温暖",
-  "blessing": "希望她健康快乐"
+  "length": 50
 }
 ```
 

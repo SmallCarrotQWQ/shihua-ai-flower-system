@@ -54,7 +54,7 @@ http://localhost:5000/docs
 DEEPSEEK_API_KEY=
 DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
 DEEPSEEK_MODEL=deepseek-chat
-MODEL_PATH=./runtime/models/flower_model.h5
+MODEL_PATH=./runtime/models/final_flowers_dataset_v_1.pkl
 CLASS_NAMES_PATH=./runtime/models/class_names.json
 REDIS_URL=redis://localhost:6379/0
 CHROMA_PATH=./runtime/chroma
@@ -65,13 +65,26 @@ CHROMA_PATH=./runtime/chroma
 ## 模型和运行数据
 
 ```text
-runtime/models/flower_model.h5      Oxford-102 识花模型
-runtime/models/class_names.json     类别映射
-runtime/chroma/                     ChromaDB 向量库
-logs/                               运行日志
+runtime/models/final_flowers_dataset_v_1.pkl  Oxford-102 fastai 识花模型
+runtime/models/class_names.json                类别映射
+runtime/chroma/                                ChromaDB 向量库
+logs/                                          运行日志
 ```
 
 这些运行数据不提交 Git。
+
+当前 AI 识花已接入指定 Hugging Face Space 的 fastai 模型，实际模型文件为：
+
+```text
+runtime/models/final_flowers_dataset_v_1.pkl
+```
+
+模型来源：
+
+- Hugging Face Space：https://huggingface.co/spaces/tdnathmlenthusiast/flower_classifier
+- GitHub 说明与 MIT License：https://github.com/darkangrycoder/102_oxford_flower_prediction
+
+注意：该模型是 fastai/PyTorch pickle 文件，Hugging Face 标记为 `Unsafe pickle`。本项目只从上述指定来源下载到 `runtime/models/`，模型文件不提交 Git。
 
 ## 当前接口
 
@@ -84,6 +97,51 @@ POST /chat/stream
 POST /sentiment
 GET  /vector/status
 ```
+
+## AI 图片识花
+
+识花接口：
+
+```text
+POST /recognize
+Content-Type: multipart/form-data
+```
+
+请求字段：
+
+```text
+image  图片文件，必填
+top_k  返回候选数量，可选，默认 5
+```
+
+返回示例：
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "predictions": [
+      {
+        "class_id": 7,
+        "class_name_en": "moon orchid",
+        "class_name_cn": "moon orchid",
+        "confidence": 0.9977,
+        "flower_language": "此花属于 Oxford Flowers 102 识别类别，可结合商品详情查看具体花语和养护建议。",
+        "related_products": []
+      }
+    ]
+  }
+}
+```
+
+依赖安装仍然放在项目目录内：
+
+```powershell
+.\.venv\Scripts\python -m pip install --cache-dir .\.pip-cache -r requirements.txt
+```
+
+如果模型文件缺失或加载失败，接口会返回“模型未加载”的降级结果，不会导致 FastAPI 启动失败。
 
 ## 智能花语客服
 
