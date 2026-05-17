@@ -33,7 +33,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/health", "/actuator/**", "/user/login", "/user/register", "/flower/**", "/category/**").permitAll()
+                .requestMatchers("/health", "/actuator/**", "/user/login", "/user/register", "/flower/**", "/category/**", "/review/flower/**", "/ai/health", "/ai/chat", "/ai/chat/stream").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

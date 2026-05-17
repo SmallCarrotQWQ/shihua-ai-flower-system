@@ -8,7 +8,9 @@
         <RouterLink to="/list">鲜花</RouterLink>
         <RouterLink to="/ai-scan">AI识花</RouterLink>
         <RouterLink to="/cart">购物车</RouterLink>
-        <RouterLink to="/admin/dashboard">管理端</RouterLink>
+        <RouterLink v-if="auth.token" to="/profile">我的</RouterLink>
+        <RouterLink v-if="auth.token" to="/orders">订单</RouterLink>
+        <RouterLink v-if="auth.userInfo?.role === 'ADMIN'" to="/admin/dashboard">管理端</RouterLink>
         <RouterLink v-if="!auth.token" to="/login">登录</RouterLink>
         <button v-else type="button" @click="logout">{{ auth.username }} / 退出</button>
       </nav>

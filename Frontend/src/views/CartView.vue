@@ -13,6 +13,12 @@
       </article>
       <footer>
         <strong>合计：￥{{ total }}</strong>
+        <select v-model.number="addressId">
+          <option :value="0">不选择地址</option>
+          <option v-for="address in addresses" :key="address.addressId" :value="address.addressId">
+            {{ address.receiver }} {{ address.phone }}
+          </option>
+        </select>
         <button type="button" @click="submitOrder">提交订单</button>
       </footer>
     </div>
@@ -26,11 +32,14 @@ import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { deleteCart, getCart, updateCart, type CartItem } from "@/api/cart";
 import { createOrder } from "@/api/order";
+import { getAddresses, type Address } from "@/api/user";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const auth = useAuthStore();
 const items = ref<CartItem[]>([]);
+const addresses = ref<Address[]>([]);
+const addressId = ref(0);
 const message = ref("");
 const total = computed(() => items.value.reduce((sum, item) => sum + Number(item.subtotal), 0).toFixed(2));
 
@@ -44,6 +53,10 @@ async function loadCart() {
   try {
     const { data } = await getCart();
     items.value = data.data;
+    const addressResponse = await getAddresses();
+    addresses.value = addressResponse.data.data;
+    const defaultAddress = addresses.value.find((item) => item.isDefault === 1);
+    addressId.value = defaultAddress?.addressId ?? 0;
   } catch (exception: any) {
     message.value = exception?.response?.data?.message || "购物车加载失败";
   }
@@ -61,7 +74,7 @@ async function remove(cartId: number) {
 
 async function submitOrder() {
   try {
-    const { data } = await createOrder(items.value.map((item) => item.cartId), "前端提交订单");
+    const { data } = await createOrder(items.value.map((item) => item.cartId), "前端提交订单", addressId.value || undefined);
     items.value = [];
     message.value = `订单提交成功，订单号：${data.data.orderId}`;
   } catch (exception: any) {
@@ -86,6 +99,10 @@ footer {
   grid-template-columns: 1fr 100px 140px 80px;
   gap: 12px;
   align-items: center;
+}
+
+footer {
+  grid-template-columns: 1fr 180px 120px;
 }
 
 input {

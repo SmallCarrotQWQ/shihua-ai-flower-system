@@ -71,7 +71,12 @@ src/views/admin/  管理端页面
 - 商品列表：调用 `GET /flower`
 - 商品详情：调用 `GET /flower/{id}`
 - 购物车：调用 `GET /cart`、`POST /cart`、`PUT /cart/{id}`、`DELETE /cart/{id}`
-- 订单确认：调用 `POST /order`
+- 订单确认：调用 `POST /order`，支持选择收货地址
+- 个人资料：调用 `GET /user/info`、`PUT /user/info`、`PUT /user/password`
+- 地址管理：调用 `GET/POST/PUT/DELETE /user/address`
+- 我的订单：调用 `GET /order`、`POST /order/{id}/pay`、`POST /order/{id}/cancel`、`POST /order/{id}/receive`
+- 订单评价：调用 `POST /review/order/{orderId}`
+- 智能花语客服：流式对话直连 FastAPI `POST /chat/stream`，保留 SpringBoot `POST /ai/chat` 作为非流式备用接口
 
 当前页面路由：
 
@@ -82,6 +87,9 @@ src/views/admin/  管理端页面
 /list?categoryId=1
 /detail/:id
 /cart
+/profile
+/address
+/orders
 /login
 /register
 ```
@@ -95,10 +103,53 @@ src/views/admin/  管理端页面
 - `/admin/dashboard`：数据看板，调用 `GET /admin/dashboard/stats`
 - `/admin/flower`：鲜花管理，支持新增、修改、上下架、删除
 - `/admin/category`：分类管理，支持新增、修改、删除
-- `/admin/order`：订单管理，支持发货、取消
+- `/admin/order`：订单管理，支持发货、取消，订单状态为待支付、待发货、待收货、已完成、已取消
 - `/admin/user`：用户管理，支持启用、禁用
 
-当前后台页面只做功能对接，不做最终视觉美化。后台接口目前要求已登录用户携带 JWT，后续可以在后端增加 `ROLE_ADMIN` 拦截。
+当前后台页面只做功能对接，不做最终视觉美化。后台接口已经收紧为 `ADMIN` 角色访问，前端路由也会根据登录用户的 `role` 控制后台入口和访问跳转。
+
+## 用户中心与订单页面
+
+本轮新增三个用户侧页面：
+
+```text
+/profile  个人资料与修改密码
+/address  收货地址管理
+/orders   我的订单、模拟支付、取消、确认收货、评价
+```
+
+购物车提交订单前会读取用户地址列表，优先选择默认地址。订单创建请求会携带 `addressId`，后端会保存地址快照。
+
+## 智能花语客服组件
+
+`src/components/AiChatWidget.vue` 已接入真实流式接口：
+
+```text
+POST http://localhost:5000/chat/stream
+```
+
+前端使用 `fetch + ReadableStream` 读取 SSE：
+
+- `delta`：逐步追加 AI 回复文本
+- `done`：结束回复并渲染 2 个联想问题按钮
+
+前端会在 `localStorage` 中保存 `shihua_ai_chat_session`，用于保持同一浏览器的短期会话。接口封装在：
+
+```text
+src/api/ai.ts
+```
+
+运行时需要同时启动：
+
+```text
+FastAPI-Backend  http://localhost:5000
+SpringBoot       http://localhost:8080/api/v1
+Frontend         http://localhost:5173
+```
+
+如果 FastAPI 或 DeepSeek 暂时不可用，页面会显示后端返回的降级回复。
+
+注意：为了获得真正的逐字流式效果，前端流式接口直接请求 `VITE_AI_BASE_URL`，默认值为 `http://localhost:5000`。SpringBoot 仍保留 `/api/v1/ai/chat/stream` 代理接口，但部分本地 Java HTTP 代理会缓冲 SSE，不建议前端流式场景优先使用。
 
 ## 编码约定
 

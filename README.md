@@ -20,17 +20,30 @@ project plan/        原始项目设计文档
 - 前端已可运行：`http://localhost:5173`
 - SpringBoot 已可运行：`http://localhost:8080/api/v1/health`
 - MySQL 已接入：默认库名 `shihua_ai_flower`
-- FastAPI 骨架已完成：`http://localhost:5000/health`
-- Redis、DeepSeek、识花模型暂时可以后续接入
+- FastAPI AI 服务已接入：`http://localhost:5000/health`
+- 用户注册登录、鲜花浏览、购物车、提交订单、管理员基础后台、智能花语客服已完成
+- 本轮新增用户中心、地址管理、订单支付/取消/收货/评价、后台角色拦截和 AI 贺卡后端入口
+- Redis、AI 识花真实模型、ChromaDB 知识库检索仍作为后续增强项
 
 ## 推荐开发顺序
 
-1. 先实现基础电商闭环：
-   用户注册登录、鲜花分类、鲜花列表、鲜花详情、购物车、提交订单。
-2. 再实现管理员后台：
-   鲜花管理、分类管理、订单管理、用户管理、数据看板。
-3. 最后接入 AI：
-   AI 贺卡、AI 客服、AI 识花、评论情感分析。
+1. 当前主线：
+   用户中心、地址管理、订单支付/收货/评价、管理员权限已经进入可联调阶段。
+2. 下一阶段：
+   完善 AI 贺卡前端入口、AI 识花上传识别、评论情感分析 FastAPI 化。
+3. 上线前整理：
+   Redis 缓存/限流、ChromaDB 知识库检索、接口测试、前端视觉美化和 Git 分阶段提交。
+
+## 默认测试账号
+
+执行 `database/03_seed_data.sql` 后可使用：
+
+```text
+管理员：admin / admin123
+普通用户：demo / admin123
+```
+
+管理员账号角色为 `ADMIN`，普通用户角色为 `USER`。后台接口 `/api/v1/admin/**` 需要管理员角色。
 
 ## 启动顺序
 
@@ -65,4 +78,3 @@ git push -u origin main
 ```
 
 如果远程仓库已经存在，直接替换 `<your-name>/<your-repo>` 即可。
-

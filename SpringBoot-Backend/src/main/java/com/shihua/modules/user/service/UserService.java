@@ -2,8 +2,10 @@ package com.shihua.modules.user.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shihua.common.exception.BusinessException;
+import com.shihua.modules.user.dto.ChangePasswordRequest;
 import com.shihua.modules.user.dto.LoginRequest;
 import com.shihua.modules.user.dto.RegisterRequest;
+import com.shihua.modules.user.dto.UpdateProfileRequest;
 import com.shihua.modules.user.entity.SysUser;
 import com.shihua.modules.user.mapper.SysUserMapper;
 import com.shihua.modules.user.vo.LoginVO;
@@ -69,8 +71,39 @@ public class UserService {
         return toUserInfo(user);
     }
 
+    @Transactional
+    public UserInfoVO updateProfile(Long userId, UpdateProfileRequest request) {
+        SysUser user = requireUser(userId);
+        if (request.getGender() != null) {
+            user.setGender(request.getGender());
+        }
+        user.setPhone(request.getPhone());
+        user.setEmail(request.getEmail());
+        user.setAvatar(request.getAvatar());
+        userMapper.updateById(user);
+        return toUserInfo(user);
+    }
+
+    @Transactional
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        SysUser user = requireUser(userId);
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new BusinessException("原密码错误");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userMapper.updateById(user);
+    }
+
     private SysUser findByUsername(String username) {
         return userMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username.trim()));
+    }
+
+    private SysUser requireUser(Long userId) {
+        SysUser user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        return user;
     }
 
     private UserInfoVO toUserInfo(SysUser user) {
@@ -86,4 +119,3 @@ public class UserService {
         );
     }
 }
-

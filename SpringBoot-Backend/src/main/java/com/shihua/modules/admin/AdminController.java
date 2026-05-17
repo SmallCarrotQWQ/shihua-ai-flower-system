@@ -8,6 +8,7 @@ import com.shihua.modules.admin.service.AdminService;
 import com.shihua.modules.flower.vo.CategoryVO;
 import com.shihua.modules.flower.vo.FlowerVO;
 import com.shihua.modules.order.vo.OrderVO;
+import com.shihua.modules.review.vo.ReviewVO;
 import com.shihua.modules.user.vo.UserInfoVO;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -96,6 +97,11 @@ public class AdminController {
         return ApiResponse.success(null);
     }
 
+    @GetMapping("/review")
+    public ApiResponse<List<ReviewVO>> reviews() {
+        return ApiResponse.success(adminService.listReviews());
+    }
+
     @GetMapping("/user")
     public ApiResponse<List<UserInfoVO>> users() {
         return ApiResponse.success(adminService.listUsers());
@@ -107,4 +113,3 @@ public class AdminController {
         return ApiResponse.success(null);
     }
 }
-

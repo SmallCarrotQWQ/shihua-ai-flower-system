@@ -42,6 +42,21 @@ public class OrderController {
         return ApiResponse.success(orderService.detail(currentUserId(authentication), id));
     }
 
+    @PostMapping("/{id}/pay")
+    public ApiResponse<OrderVO> pay(Authentication authentication, @PathVariable("id") Long id) {
+        return ApiResponse.success(orderService.pay(currentUserId(authentication), id));
+    }
+
+    @PostMapping("/{id}/receive")
+    public ApiResponse<OrderVO> receive(Authentication authentication, @PathVariable("id") Long id) {
+        return ApiResponse.success(orderService.confirmReceive(currentUserId(authentication), id));
+    }
+
+    @PostMapping("/{id}/cancel")
+    public ApiResponse<OrderVO> cancel(Authentication authentication, @PathVariable("id") Long id) {
+        return ApiResponse.success(orderService.cancel(currentUserId(authentication), id));
+    }
+
     private Long currentUserId(Authentication authentication) {
         return Long.valueOf(authentication.getName());
     }

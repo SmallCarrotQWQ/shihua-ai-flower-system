@@ -16,6 +16,8 @@ import com.shihua.modules.order.entity.Orders;
 import com.shihua.modules.order.mapper.OrdersMapper;
 import com.shihua.modules.order.service.OrderService;
 import com.shihua.modules.order.vo.OrderVO;
+import com.shihua.modules.review.service.ReviewService;
+import com.shihua.modules.review.vo.ReviewVO;
 import com.shihua.modules.user.entity.SysUser;
 import com.shihua.modules.user.mapper.SysUserMapper;
 import com.shihua.modules.user.vo.UserInfoVO;
@@ -39,6 +41,7 @@ public class AdminService {
     private final SysUserMapper userMapper;
     private final FlowerService flowerService;
     private final OrderService orderService;
+    private final ReviewService reviewService;
 
     public AdminService(
         FlowerMapper flowerMapper,
@@ -46,7 +49,8 @@ public class AdminService {
         OrdersMapper ordersMapper,
         SysUserMapper userMapper,
         FlowerService flowerService,
-        OrderService orderService
+        OrderService orderService,
+        ReviewService reviewService
     ) {
         this.flowerMapper = flowerMapper;
         this.categoryMapper = categoryMapper;
@@ -54,6 +58,7 @@ public class AdminService {
         this.userMapper = userMapper;
         this.flowerService = flowerService;
         this.orderService = orderService;
+        this.reviewService = reviewService;
     }
 
     public Map<String, Object> dashboardStats() {
@@ -150,15 +155,22 @@ public class AdminService {
 
     @Transactional
     public void updateOrderStatus(Long id, StatusRequest request) {
-        Orders order = ordersMapper.selectById(id);
-        if (order == null) {
-            throw new BusinessException("Order not found");
+        if (request.getStatus() == null) {
+            throw new BusinessException("Status is required");
         }
-        order.setStatus(request.getStatus());
-        if (request.getStatus() != null && request.getStatus() == 2) {
-            order.setDeliverTime(LocalDateTime.now());
+        if (request.getStatus() == OrderService.STATUS_PENDING_RECEIVE) {
+            orderService.adminDeliver(id);
+            return;
         }
-        ordersMapper.updateById(order);
+        if (request.getStatus() == OrderService.STATUS_CANCELED) {
+            orderService.adminCancel(id);
+            return;
+        }
+        throw new BusinessException("Admin can only deliver or cancel orders");
+    }
+
+    public List<ReviewVO> listReviews() {
+        return reviewService.listAll();
     }
 
     public List<UserInfoVO> listUsers() {

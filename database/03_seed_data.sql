@@ -2,9 +2,10 @@ USE shihua_ai_flower;
 
 INSERT INTO sys_user (username, password, role, phone)
 VALUES
-  ('admin', '$2a$10$replace_with_bcrypt_hash', 'ADMIN', '13800000000'),
-  ('demo', '$2a$10$replace_with_bcrypt_hash', 'USER', '13900000000')
+  ('admin', '$2a$10$mrt08QLNqnEwsW37gkTMceag/ptINYOQXOuvm6piakmu1hjs8lWwq', 'ADMIN', '13800000000'),
+  ('demo', '$2a$10$mrt08QLNqnEwsW37gkTMceag/ptINYOQXOuvm6piakmu1hjs8lWwq', 'USER', '13900000000')
 ON DUPLICATE KEY UPDATE username = VALUES(username);
+UPDATE sys_user SET password = '$2a$10$mrt08QLNqnEwsW37gkTMceag/ptINYOQXOuvm6piakmu1hjs8lWwq', role = 'ADMIN', status = 1 WHERE username = 'admin';
 
 INSERT INTO flower_category (category_id, category_name, parent_id, sort_order)
 VALUES

@@ -41,7 +41,7 @@ async function setStatus(id: number, status: number) {
 }
 
 function statusText(status: number) {
-  return ["待付款", "已付款", "已发货", "已完成", "已取消"][status] || "未知";
+  return ["待支付", "待发货", "待收货", "已完成", "已取消"][status] || "未知";
 }
 </script>
 
@@ -58,4 +58,3 @@ th {
   padding: 8px;
 }
 </style>
-
